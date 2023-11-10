@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import classes from './EventForm.module.css';
+import { getAuthToken } from '../util/auth';
 
 const EventForm = ({ method, event }) => {
   const data = useActionData();
@@ -97,10 +98,14 @@ export const action = async ({ params: { eventId }, request }) => {
     method === 'PATCH' ? eventId : ''
   }`;
 
+  const token = getAuthToken();
   const response = await fetch(url, {
     method,
     body: JSON.stringify(eventData),
-    headers: { 'Content-Type': 'application/json' }
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    }
   });
   const { ok, status } = response;
 
